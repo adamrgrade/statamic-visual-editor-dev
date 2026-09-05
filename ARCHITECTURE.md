@@ -5,6 +5,8 @@
 ```
 Blueprint loads
   → InjectVisualIdIntoBlueprint injects hidden _visual_id (auto_uuid) into every Replicator/Bard/Grid set
+  → Fieldset imports remain as import references; imported fields are resolved only for runtime traversal
+  → Statamic blueprint builder routes are skipped so editor saves cannot persist runtime-only fields
 
 CP form renders
   → AutoUuidFieldtype generates a fresh in-memory UUID per set (never persisted)
@@ -44,6 +46,8 @@ Entry/Globals saved
 ## Notable Design Decisions
 
 - **Ephemeral UUIDs**: UUIDs are never saved to content files. They are generated fresh on every CP form load and stripped on every save. This keeps content files clean with zero footprint.
+- **Import preservation**: Blueprint and fieldset `import:` references must stay intact in saved YAML. Injection and stripping resolve imports only while traversing runtime field definitions.
+- **Blueprint builder isolation**: Runtime `_visual_id` fields are not injected while Statamic's blueprint builder is listing, editing, or saving schemas. Those routes work with persistable YAML, not Live Preview form state.
 - **Bard text targeting**: Plain text between Bard sets is targeted using `{uid, afterSetUid}` — the parent set UUID plus the preceding set node UUID — to scroll precisely without a double-jump.
 - **Tab switching**: Inactive tab panels are activated by walking the Vue component parent chain to call Statamic's `PublishTabs.setActive(handle)` directly, since reka-ui triggers don't respond to programmatic clicks.
 - **Non-bubbling expand click**: Programmatic set expansion uses `dispatchEvent(new MouseEvent('click', { bubbles: false }))` to trigger Vue's toggle without firing the document-level click listener that would send a spurious focus message back to the preview.
