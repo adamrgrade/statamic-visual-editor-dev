@@ -84,6 +84,24 @@ test.describe('Manual field targeting via field= param', () => {
     await expect(page.locator('#field_seo_title')).toHaveAttribute('data-sve-active', '');
   });
 
+  test('clicking field in iframe while on inactive tab switches CP tab and activates field', async ({
+    page,
+  }) => {
+    // Switch to SEO tab in the CP.
+    await page.getByRole('tab', { name: 'SEO' }).click();
+    await expect(page.getByRole('tab', { name: 'SEO' })).toHaveAttribute('data-state', 'active');
+
+    // Click title field (located in Main tab) in iframe.
+    await page
+      .frameLocator('#live-preview-iframe')
+      .locator('[data-sid-field="title"]')
+      .click();
+
+    // Main tab should become active and title field focused.
+    await expect(page.getByRole('tab', { name: 'Main' })).toHaveAttribute('data-state', 'active');
+    await expect(page.locator('#field_title')).toHaveAttribute('data-sve-active', '');
+  });
+
   test('clicking nested field data-sid-field="page_info.author" focuses the correct CP field', async ({
     page,
   }) => {
