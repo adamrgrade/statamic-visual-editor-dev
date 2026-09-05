@@ -1,5 +1,13 @@
 {
   "name": "mariohamann/statamic-visual-editor",
+  "description": "Click-to-edit for Statamic's Live Preview",
+  "type": "statamic-addon",
+  "license": "MIT",
+  "support": {
+    "issues": "https://github.com/mariohamann/statamic-visual-editor/issues",
+    "source": "https://github.com/mariohamann/statamic-visual-editor",
+    "docs": "https://github.com/mariohamann/statamic-visual-editor#readme"
+  },
   "autoload": {
     "psr-4": {
       "MarioHamann\\StatamicVisualEditor\\": "src"
